@@ -1,0 +1,30 @@
+<h2>Products</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>description</th>
+      <th>quantity</th>
+      <th>price</th>
+      <th>category</th>
+      <th>onSale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of content">
+
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.category }}</td>
+      <td>{{ item.onSale }}</td>
+
+    </tr>
+  </tbody>
+
+
+</table>
+
