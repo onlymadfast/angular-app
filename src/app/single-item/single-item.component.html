@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="card m-2 col-sm-4" *ngIf="singleItem">
+    <img src="#" class="card-img-top" alt="{{ singleItem.image }}">
+      <div class="card-body">
+        <h5 class="card-title">{{ singleItem.name }}</h5>
+        <p class="card-text">{{ singleItem.description }}</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Quantity: {{ singleItem.quantityOnWarehouse }}</li>
+          <li class="list-group-item">Category: {{ singleItem.category }}</li>
+          <li class="list-group-item" *ngIf="singleItem.onSale">on Sale</li>
+          <li class="list-group-item">Price: {{ singleItem.price }}</li>
+        </ul>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-info" routerLink="/item-update/{{ singleItem.id }}">Update item</button>
+          <button type="submit" class="btn btn-danger m-1" (click)="deleteItemAndGetProducts()">Delete item</button>
+        </div>
+      </div>
+
+  </div>
+</div>

@@ -1,22 +1,47 @@
-<section class="home-blog bg-sand">
-  <div class="container">
-    <!-- section title -->
-    <div class="row justify-content-md-center">
-      <div class="col-xl-5 col-lg-6 col-md-8">
-        <div class="section-title text-center title-ex1">
-          <h2>PetProject by @Me</h2>
-          <p>Simple application using java spring boot + angular + postgresql and more...</p>
-        </div>
-      </div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<!--navbar start-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Store</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated == true">
+          <a class="nav-link active" aria-current="page" href="user-profile">User profile</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated == false">
+          <a class="nav-link active" aria-current="page" href="login">Sign in | Sign up</a>
+        </li>
+        <li *ngIf="isAuthenticated == true">
+          <span> Username: {{ username }} </span>
+          <a class="nav-link active" aria-current="page" (click)="logOut()">Log out</a>
+        </li>
+      </ul>
     </div>
-    <!-- section title ends -->
-
-
-    <div class="container" id="main-container">
-
-      <app-item-list></app-item-list>
-
-    </div>
-
   </div>
-</section>
+</nav>
+<!--navbar end-->
+
+<div class="container" id="main-container">
+
+  <router-outlet></router-outlet> <!--dynamic view based on app-routing.modules.ts -->
+
+</div>
+
+</body>
+</html>

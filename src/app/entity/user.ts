@@ -4,14 +4,10 @@ import {Order} from "./order";
 
 export class User {
 
-  constructor(id: string, created: string,
-              username: string, password: string,
+  constructor(username: string, password: string,
               email: string, firstName: string,
               lastName: string, middleName: string,
-              birthdate: string, role: Role,
-              address: Address, order: Array<Order>) {
-    this.id = id;
-    this.created = created;
+              birthdate: string) {
     this.username = username;
     this.password = password;
     this.email = email;
@@ -19,13 +15,10 @@ export class User {
     this.lastName = lastName;
     this.middleName = middleName;
     this.birthdate = birthdate;
-    this.role = role;
-    this.address = address;
-    this.order = order;
   }
 
-  id:string;
-  created: string;
+  id?: string;
+  created?: string;
   username: string;
   password: string;
   email: string;
@@ -33,8 +26,8 @@ export class User {
   lastName: string;
   middleName: string;
   birthdate: string;
-  role: Role;
-  address: Address;
-  order: Array<Order>;
+  role?: Role;
+  address?: Address;
+  order?: Array<Order>;
 
 }

@@ -1,0 +1,27 @@
+<div class="col-md-6 offset-md-3">
+  <h2>Users in our system</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">FirstName</th>
+      <th scope="col">LastName</th>
+      <th scope="col">MiddleName</th>
+      <th scope="col">Birthdate</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <th scope="row">*</th>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.firstName }}</td>
+      <td>{{ user.lastName }}</td>
+      <td>{{ user.middleName }}</td>
+      <td>{{ user.birthdate }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

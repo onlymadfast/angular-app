@@ -7,7 +7,6 @@ import {User} from "./user";
 
 export class Order {
 
-
   constructor(id: number, created: string,
               orderDate: string, howPay: HowPay,
               howDeliver: HowDeliver, statusPay: StatusPay,

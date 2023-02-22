@@ -1,0 +1,117 @@
+<!--login user-->
+<div class="col-md-6 offset-md-3" *ngIf="isAlreadyHaveAccount; else registration">
+  <br>
+  <form [formGroup]="formLogin" (ngSubmit)="onLoginUser()">
+    <!-- username input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="usernameFirstTime">Username</label>
+      <input type="text" id="usernameFirstTime" class="form-control" formControlName="username"/>
+    </div>
+    <!-- password input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="passwordFirstTime">Password</label>
+      <input type="password" id="passwordFirstTime" class="form-control" formControlName="password" />
+    </div>
+    <!--  forgot password -->
+    <div class="form-check">
+      <label class="form-check-label" for="forgot">Forgot Password</label>
+      <input class="form-check-input" type="checkbox" id="forgot" formControlName="isForgetPassword"/>
+    </div>
+    <br>
+
+    <div class="row g-3">
+      <!-- Create button -->
+      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+      <!-- Registration button  -->
+      <button type="button" class="btn btn-dark btn-block mb-4" (click)="onSignUpClick()">Sign up</button>
+    </div>
+
+  </form>
+</div>
+
+<!--if user doesn't exist, lets create user-->
+<ng-template #registration>
+  <div class="col-md-6 offset-md-3">
+    <br>
+    <form [formGroup]="formRegister" (ngSubmit)="onCreate()" class="needs-validation" novalidate>
+      <!-- username input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="username">Username</label>
+        <input type="text" id="username" class="form-control" formControlName="username" name="username" required/>
+        <div class="invalid-feedback">Please provide a username.</div>
+      </div>
+      <!-- password input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" class="form-control" formControlName="password" name="password"/>
+      </div>
+      <!-- confirm password input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword"/>
+        <span id="message" style="color:red"></span>
+      </div>
+      <!-- email input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" class="form-control" formControlName="email" name="email"/>
+      </div>
+      <!-- firstName input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="firstName">FirstName</label>
+        <input type="text" id="firstName" class="form-control" formControlName="firstName" name="firstName"/>
+      </div>
+      <!-- lastName input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="lastname">Lastname</label>
+        <input type="text" id="lastname" class="form-control" formControlName="lastName" name="lastname"/>
+      </div>
+      <!-- middleName input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="middleName">MiddleName</label>
+        <input type="text" id="middleName" class="form-control" formControlName="middleName" name="middleName"/>
+      </div>
+      <!-- birthday input -->
+      <!--Checks that-->
+      <!--1) the year is numeric and starts with 19 or 20,-->
+      <!--2) the month is numeric and between 01-12, and-->
+      <!--3) the day is numeric between 01-29, or-->
+      <!--b) 30 if the month value is anything other than 02, or-->
+      <!--c) 31 if the month value is one of 01,03,05,07,08,10, or 12.-->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="birthday">Birthday</label>
+        <input type="date" id="birthday" class="form-control" formControlName="birthday" name="birthday"
+               pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"/>
+      </div>
+
+      <div class="row g-3">
+        <!-- Create button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Create account</button>
+        <!-- back to sign in  -->
+        <button type="button" class="btn btn-dark btn-block mb-4" (click)="onSignInClick()">Back to sign in</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!--verify passwords script-->
+  <script>
+    function verifyPassword() {
+      let pw = document.getElementById("password");
+      let confirmPw = document.getElementById("confirmPassword");
+
+      if (pw !== confirmPw) {
+        document.getElementById("message").innerHTML = "**Passwords didn't match";
+        return false;
+      } else {
+        if (pw.value < 3 && confirmPw.value < 3) {
+          document.getElementById("message").innerHTML = "**Password length must be atleast 3 characters";
+          return false;
+        }
+      }
+    }
+  </script>
+
+</ng-template>
+
+

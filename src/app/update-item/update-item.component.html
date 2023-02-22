@@ -1,0 +1,107 @@
+<div class="col-md-6 offset-md-3">
+  <br>
+  <form (ngSubmit)="onSubmitUpdateOperation()">
+    <!-- name input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="name">Name</label>
+      <input type="text" id="name" class="form-control" [(ngModel)]="item.name" name="name"/>
+    </div>
+
+    <!-- quantityOnWarehouse input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="quantityOnWarehouse">Quantity on warehouse</label>
+      <input type="text" id="quantityOnWarehouse" class="form-control" [(ngModel)]="item.quantityOnWarehouse" name="quantityOnWarehouse"/>
+    </div>
+
+    <!-- price input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="price">Price</label>
+      <input type="text" id="price" class="form-control" [(ngModel)]="item.price" name="price"/>
+    </div>
+
+    <!-- description input -->
+    <div class="form-outline mb-4">
+      <!--      <input type="text" id="description" class="form-control" [(ngModel)]="item.description" name="description"/>-->
+      <label class="form-label" for="description">Description</label>
+      <textarea class="form-control" id="description" rows="3" [(ngModel)]="item.description" name="description"></textarea>
+    </div>
+
+    <!-- category input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="category">Category</label>
+      <select class="form-control" id="category">
+        <option value="" disabled selected="selected">Current category: {{ item.category }}</option>
+        <option *ngFor="let cat of categories" value="{{ cat }}">{{ cat }}</option>
+      </select>
+    </div>
+
+    <!-- onSale input -->
+    <div class="form-check">
+      <label class="form-check-label" for="onSale"> onSale? </label>
+      <input class="form-check-input" type="checkbox" id="onSale" [(ngModel)]="onSale" name="onSale" />
+    </div>
+    <br>
+    <!-- Save button -->
+    <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
+    <br>
+    <!-- Back without save-->
+    <a class="link-danger" href="/item/{{ item.id }}" *ngIf="saved; else backWithoutSave">Back</a>
+    <ng-template #backWithoutSave>
+      <a class="link-danger" href="/item/{{ item.id }}">Back without save</a>
+    </ng-template>
+
+  </form>
+</div>
+
+<!--if save operation-->
+<!--<ng-template #saveOperation>-->
+<!--  &lt;!&ndash; name input &ndash;&gt;-->
+<!--  <div class="form-outline mb-4">-->
+<!--    <label class="form-label" for="nameSave">Name</label>-->
+<!--    <input type="text" id="nameSave" class="form-control" [(ngModel)]="item.name" name="name"/>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; quantityOnWarehouse input &ndash;&gt;-->
+<!--  <div class="form-outline mb-4">-->
+<!--    <label class="form-label" for="quantityOnWarehouseSave">Quantity on warehouse</label>-->
+<!--    <input type="text" id="quantityOnWarehouseSave" class="form-control" [(ngModel)]="item.quantityOnWarehouse" name="quantityOnWarehouse"/>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; price input &ndash;&gt;-->
+<!--  <div class="form-outline mb-4">-->
+<!--    <label class="form-label" for="priceSave">Price</label>-->
+<!--    <input type="text" id="priceSave" class="form-control" [(ngModel)]="item.price" name="price"/>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; description input &ndash;&gt;-->
+<!--  <div class="form-outline mb-4">-->
+<!--    &lt;!&ndash;      <input type="text" id="description" class="form-control" [(ngModel)]="item.description" name="description"/>&ndash;&gt;-->
+<!--    <label class="form-label" for="descriptionSave">Description</label>-->
+<!--    <textarea class="form-control" id="descriptionSave" rows="3" [(ngModel)]="item.description" name="description"></textarea>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; category input &ndash;&gt;-->
+<!--  <div class="form-outline mb-4">-->
+<!--    <label class="form-label" for="categorySave">Category</label>-->
+<!--    <select class="form-control" id="categorySave">-->
+<!--      <option value="" disabled selected="selected">Current category: {{ item.category }}</option>-->
+<!--      <option *ngFor="let cat of categories" value="{{ cat }}">{{ cat }}</option>-->
+<!--    </select>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; onSale input &ndash;&gt;-->
+<!--  <div class="form-check">-->
+<!--    <label class="form-check-label" for="onSaleSave"> onSale? </label>-->
+<!--    <input class="form-check-input" type="checkbox" id="onSaleSave" [(ngModel)]="onSale" name="onSale" />-->
+<!--  </div>-->
+<!--  <br>-->
+<!--  &lt;!&ndash; Save button &ndash;&gt;-->
+<!--  <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>-->
+<!--  <br>-->
+<!--  &lt;!&ndash; Back without save&ndash;&gt;-->
+<!--  <a class="link-danger" href="/item/{{ item.id }}" *ngIf="saved; else backWithoutSave">Back</a>-->
+<!--  <ng-template #backWithoutSave>-->
+<!--    <a class="link-danger" href="/item/{{ item.id }}">Back without save</a>-->
+<!--  </ng-template>-->
+<!--  -->
+<!--</ng-template>-->
