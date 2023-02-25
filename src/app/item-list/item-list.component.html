@@ -5,14 +5,16 @@
       <h5 class="card-title">{{ item.name }}</h5>
       <p class="card-text">{{ item.description }}</p>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Quantity: {{ item.quantityOnWarehouse }}</li>
+        <li class="list-group-item" *ngIf="isAdminModeOn">Quantity on warehouse: {{ item.quantityOnWarehouse }}</li>
+        <li class="list-group-item">Quantity in shop: {{ item.quantity }}</li>
         <li class="list-group-item">Category: {{ item.category }}</li>
         <li class="list-group-item">OnSale? - {{ item.onSale }}</li>
         <li class="list-group-item">Price: {{ item.price }}</li>
       </ul>
     </div>
     <div class="card-footer">
-      <a class="link-info" href="/item/{{ item.id }}">View details</a>
+      <a class="link-info" href="/item/{{ item.id }}" *ngIf="isAdminModeOn">View details</a>
+      <a class="link-info" href="/item/{{ item.id }}" *ngIf="!isAdminModeOn">Buy item <- doesnot work</a>
     </div>
   </div>
 </div>

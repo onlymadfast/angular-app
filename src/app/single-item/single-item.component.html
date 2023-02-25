@@ -5,14 +5,22 @@
         <h5 class="card-title">{{ singleItem.name }}</h5>
         <p class="card-text">{{ singleItem.description }}</p>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Quantity: {{ singleItem.quantityOnWarehouse }}</li>
+          <li class="list-group-item" *ngIf="isAdminModeOn">Quantity on warehouse: {{ singleItem.quantityOnWarehouse }}</li>
+          <li class="list-group-item">Quantity in shop: {{ singleItem.quantity }}</li>
           <li class="list-group-item">Category: {{ singleItem.category }}</li>
           <li class="list-group-item" *ngIf="singleItem.onSale">on Sale</li>
           <li class="list-group-item">Price: {{ singleItem.price }}</li>
+          <li class="list-group-item" *ngIf="singleItem.onSale; else noSale">SALE!!!</li>
+          <ng-template #noSale>
+            <li class="list-group-item">Without sale</li>
+          </ng-template>
+
         </ul>
         <div class="card-footer">
-          <button type="submit" class="btn btn-info" routerLink="/item-update/{{ singleItem.id }}">Update item</button>
-          <button type="submit" class="btn btn-danger m-1" (click)="deleteItemAndGetProducts()">Delete item</button>
+          <button type="submit" class="btn btn-info" routerLink="/items/edit/{{ singleItem.id }}" *ngIf="isAdminModeOn">Update item</button>
+          <button type="submit" class="btn btn-danger m-1" (click)="deleteItemAndGetProducts()" *ngIf="isAdminModeOn">Delete item</button>
+          <br>
+          <button type="submit" class="btn btn-danger m-1" *ngIf="!isAdminModeOn">Buy <- doesnot work</button>
         </div>
       </div>
 

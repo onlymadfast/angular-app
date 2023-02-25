@@ -12,56 +12,54 @@ export class LocalStorageService {
   private apiServerUrl = environment.apiBaseUrl;
   private encryptedKey = environment.encryptionKey;
   private token: string = '';
+  private authorities?: string[];
 
-  constructor(private http: HttpClient,
-              private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
-  public async signIn(loginObject: LoginObject): Promise<any> {
-    console.log('token Object name ' + loginObject.username);
-    //fetch token
+  public async signIn(loginObject: LoginObject) {
     const result = this.fetchToken(loginObject)
-    //take token
+
     await firstValueFrom(result)
       .then(response => {
-        this.token = response
+        this.token = response.message
+        this.authorities = response.authorities
       })
       .catch(error => {
         console.log(error)
       })
-    console.log("after firstValueFrom ->" + this.token + "<- here")
-    await this.saveData(loginObject.username, this.token);
 
-    console.log("after saving in sig up user in localStorage ->" + localStorage.getItem(loginObject.username))
+    await this.saveUserAndAuthoritiesAndTokenInLocalStorage(loginObject.username, this.token, this.authorities);
   }
 
-  public saveData(user: string, token: string) {
-    console.log("Saving data")
-    localStorage.setItem(user, this.encrypt(token));
+  public saveUserAndAuthoritiesAndTokenInLocalStorage(user: string, token: string, authorities?: string[]) {
+    localStorage.setItem("token", token);
     localStorage.setItem("name", user);
-    console.log("saving username -> " + localStorage.getItem("name"))
-  }
-
-  public async getUserIfExist(): Promise<string> {
-    let name = localStorage.getItem("name");
-    if (name === '' || name === null) {
-      console.log("tyt pusto")
-      return "empty";
+    if (authorities != null) {
+      localStorage.setItem("authorities", authorities.toString())
     } else {
-      console.log("est` imya")
-      return name;
+      console.log("authorities null and we dont save it in localStorage")
     }
   }
 
-  public getData(user: string) {
-    let data = localStorage.getItem(user) || "";
-    return this.decrypt(data);
+  public async getUserAndRolesIfExist(): Promise<{ roles: string | null; name: string | null }> {
+    let username = localStorage.getItem("name");
+    let authorities = localStorage.getItem("authorities")
+    return { name: username, roles: authorities };
+  }
+
+  public getData(key: string): string {
+    let data = localStorage.getItem(key) || "";
+
+    if (key != "token") {
+      return data;
+    }
+    return data;
   }
 
 
   public clearStorage() {
-    return this.clearData()
-      .then(() => this.router.navigate(['']))
+    return this.clearData();
   }
 
   public async clearData() {
@@ -76,12 +74,11 @@ export class LocalStorageService {
     return CryptoJS.AES.decrypt(txtToDecrypt, this.encryptedKey).toString(CryptoJS.enc.Utf8);
   }
 
-  private fetchToken(loginObject: LoginObject): Observable<string> {
-    console.log("Fetching!!")
+  private fetchToken(loginObject: LoginObject): Observable<ResponseAuthToken> {
     return this.http.post<ResponseAuthToken>(`${this.apiServerUrl}/security/auth/authenticate`, loginObject)
       .pipe(
         map(data => {
-          return data.message;
+          return data;
         })
       )
   }
@@ -93,12 +90,14 @@ export class ResponseAuthToken {
 
   constructor(localDateTime: string, status: string,
               httpStatus: string, message: string,
-              records?: Map<string, string>) {
+              records?: Map<string, string>,
+              authorities?: string[]) {
     this.localDateTime = localDateTime;
     this.status = status;
     this.httpStatus = httpStatus;
     this.message = message;
     this.records = records;
+    this.authorities = authorities;
   }
 
   localDateTime: string;
@@ -106,5 +105,6 @@ export class ResponseAuthToken {
   httpStatus: string;
   message: string;
   records?: Map<string, string>;
+  authorities?: string[]
 
 }

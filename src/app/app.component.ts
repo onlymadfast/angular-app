@@ -10,42 +10,33 @@ import {Router} from "@angular/router";
 export class AppComponent implements OnInit {
 
   isAuthenticated: boolean = false;
-  username: string | undefined = '';
-
-  //detect refresh page and redirect too another page
-  // @HostListener('window:beforeunload') goToPage() {
-  //   this.router.navigate(['/products']);
-  // }
+  username?: string | null;
+  isThatUserAdmin: boolean = false;
 
   constructor(private localStorageService: LocalStorageService,
               private router: Router) {
   }
 
   ngOnInit() {
-    console.log("isAuth -> " + this.isAuthenticated)
-    console.log("username in auth -> " + this.username)
-
-    this.localStorageService.getUserIfExist()
+    this.localStorageService.getUserAndRolesIfExist()
       .then(user => {
-        if (user === "empty") {
-          console.log("user empty ->" + user + "<- here");
-        } else {
-          this.username = user;
+        if (user.name != null && user.roles != null) {
+          this.username = user.name;
           this.isAuthenticated = true;
+
+          if (user.roles?.includes("ADMIN")) {
+            this.isThatUserAdmin = true;
+          }
         }
       })
-  }
-
-  public checkAuth() {
-
   }
 
   public logOut() {
     return this.localStorageService.clearStorage()
       .then(() => {
         this.isAuthenticated = false;
-        this.router.navigate(['/products'])
-          .then(() => this.ngOnInit())
+        this.isThatUserAdmin = false;
+        return this.router.navigate(['/products'])
       })
   }
 

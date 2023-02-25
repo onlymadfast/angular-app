@@ -1,107 +1,173 @@
 <div class="col-md-6 offset-md-3">
   <br>
-  <form (ngSubmit)="onSubmitUpdateOperation()">
+  <form [formGroup]="formEditItem" (ngSubmit)="onEditItem()" *ngIf="isThatEditSingleItem; else createItem" novalidate>
     <!-- name input -->
     <div class="form-outline mb-4">
       <label class="form-label" for="name">Name</label>
-      <input type="text" id="name" class="form-control" [(ngModel)]="item.name" name="name"/>
-    </div>
+      <input type="text" id="name" class="form-control" formControlName="name" name="name" required/>
 
+      <div *ngIf="formEditItem.controls['name'].invalid && (formEditItem.controls['name'].dirty || formEditItem.controls['name'].touched)" class="alert">
+        <div *ngIf="formEditItem.controls['name'].errors">Name is required.</div>
+      </div>
+
+    </div>
     <!-- quantityOnWarehouse input -->
     <div class="form-outline mb-4">
       <label class="form-label" for="quantityOnWarehouse">Quantity on warehouse</label>
-      <input type="text" id="quantityOnWarehouse" class="form-control" [(ngModel)]="item.quantityOnWarehouse" name="quantityOnWarehouse"/>
-    </div>
+      <input type="number" id="quantityOnWarehouse" class="form-control" formControlName="quantityOnWarehouse" name="quantityOnWarehouse" min="0"/>
 
+      <div *ngIf="formEditItem.controls['quantityOnWarehouse'].invalid && (formEditItem.controls['quantityOnWarehouse'].dirty
+      || formEditItem.controls['quantityOnWarehouse'].touched)" class="alert">
+        <div *ngIf="formEditItem.controls['quantityOnWarehouse'].errors">Quantity on warehouse must be setup!</div>
+      </div>
+
+    </div>
+    <!-- quantity input -->
+    <div class="form-outline mb-4">
+      <label class="form-label" for="quantity">Quantity in shop</label>
+      <input type="number" id="quantity" class="form-control" formControlName="quantity" name="quantity" min="0"/>
+
+      <div *ngIf="formEditItem.controls['quantity'].invalid && (formEditItem.controls['quantity'].dirty
+      || formEditItem.controls['quantity'].touched)" class="alert">
+        <div *ngIf="formEditItem.controls['quantity'].errors">Quantity must be provide!</div>
+      </div>
+
+    </div>
     <!-- price input -->
     <div class="form-outline mb-4">
       <label class="form-label" for="price">Price</label>
-      <input type="text" id="price" class="form-control" [(ngModel)]="item.price" name="price"/>
-    </div>
+      <input type="number" id="price" class="form-control" formControlName="price" name="price"/>
 
+      <div *ngIf="formEditItem.controls['price'].invalid && (formEditItem.controls['price'].dirty
+      || formEditItem.controls['price'].touched)" class="alert">
+        <div *ngIf="formEditItem.controls['price'].errors">Price must be provided!</div>
+      </div>
+
+    </div>
     <!-- description input -->
     <div class="form-outline mb-4">
-      <!--      <input type="text" id="description" class="form-control" [(ngModel)]="item.description" name="description"/>-->
       <label class="form-label" for="description">Description</label>
-      <textarea class="form-control" id="description" rows="3" [(ngModel)]="item.description" name="description"></textarea>
-    </div>
+<!--      <textarea class="form-control" id="description" rows="3" formControlName="description" name="description"></textarea>-->
+      <input type="text" id="description" class="form-control" formControlName="description" name="description" maxlength="30"/>
 
+      <div *ngIf="formEditItem.controls['description'].invalid && (formEditItem.controls['description'].dirty
+      || formEditItem.controls['description'].touched)" class="alert">
+        <div *ngIf="formEditItem.controls['description'].errors">Description cannot be empty!</div>
+      </div>
+
+    </div>
     <!-- category input -->
     <div class="form-outline mb-4">
-      <label class="form-label" for="category">Category</label>
-      <select class="form-control" id="category">
-        <option value="" disabled selected="selected">Current category: {{ item.category }}</option>
-        <option *ngFor="let cat of categories" value="{{ cat }}">{{ cat }}</option>
+      <label class="form-label" for="category">Choose category</label>
+      <select class="form-select" id="category" formControlName="category">
+        <option value="" disabled>current - {{currentCategory}}</option>
+        <option value="SHOES">SHOES</option>
+        <option value="CLOTHING">CLOTHING</option>
+        <option value="ACCESSORIES">ACCESSORIES</option>
       </select>
     </div>
-
     <!-- onSale input -->
     <div class="form-check">
       <label class="form-check-label" for="onSale"> onSale? </label>
-      <input class="form-check-input" type="checkbox" id="onSale" [(ngModel)]="onSale" name="onSale" />
+      <input class="form-check-input" type="checkbox" id="onSale" formControlName="onSale" name="onSale"/>
     </div>
     <br>
     <!-- Save button -->
     <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
     <br>
     <!-- Back without save-->
-    <a class="link-danger" href="/item/{{ item.id }}" *ngIf="saved; else backWithoutSave">Back</a>
+    <a class="link-secondary" href="/item/{{idFromParam}}" *ngIf="saved; else backWithoutSave">Back</a>
     <ng-template #backWithoutSave>
-      <a class="link-danger" href="/item/{{ item.id }}">Back without save</a>
+      <a class="link-secondary" href="/item/{{idFromParam}}">Back without save</a>
     </ng-template>
 
   </form>
 </div>
 
-<!--if save operation-->
-<!--<ng-template #saveOperation>-->
-<!--  &lt;!&ndash; name input &ndash;&gt;-->
-<!--  <div class="form-outline mb-4">-->
-<!--    <label class="form-label" for="nameSave">Name</label>-->
-<!--    <input type="text" id="nameSave" class="form-control" [(ngModel)]="item.name" name="name"/>-->
-<!--  </div>-->
+<!--if we are create new item-->
+<ng-template #createItem>
+  <div class="col-md-6 offset-md-3">
+    <br>
+    <form [formGroup]="formCreateItem" (ngSubmit)="onCreateItem()" novalidate>
+      <!-- name input -->
+      <div class="form-outline mb-4">
+        <label for="createName" class="form-label">Item name</label>
+        <input type="text" id="createName" class="form-control" formControlName="name" name="description" required/>
 
-<!--  &lt;!&ndash; quantityOnWarehouse input &ndash;&gt;-->
-<!--  <div class="form-outline mb-4">-->
-<!--    <label class="form-label" for="quantityOnWarehouseSave">Quantity on warehouse</label>-->
-<!--    <input type="text" id="quantityOnWarehouseSave" class="form-control" [(ngModel)]="item.quantityOnWarehouse" name="quantityOnWarehouse"/>-->
-<!--  </div>-->
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['name'].errors && (formCreateItem.controls['name'].dirty || formCreateItem.controls['name'].touched)">
+          <div *ngIf="formCreateItem.controls['name'].errors">Name is required!</div>
+        </div>
 
-<!--  &lt;!&ndash; price input &ndash;&gt;-->
-<!--  <div class="form-outline mb-4">-->
-<!--    <label class="form-label" for="priceSave">Price</label>-->
-<!--    <input type="text" id="priceSave" class="form-control" [(ngModel)]="item.price" name="price"/>-->
-<!--  </div>-->
+      </div>
+      <!-- description input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="createDescription">Description</label>
+        <input type="text" id="createDescription" class="form-control" formControlName="description" name="description" maxlength="30"/>
 
-<!--  &lt;!&ndash; description input &ndash;&gt;-->
-<!--  <div class="form-outline mb-4">-->
-<!--    &lt;!&ndash;      <input type="text" id="description" class="form-control" [(ngModel)]="item.description" name="description"/>&ndash;&gt;-->
-<!--    <label class="form-label" for="descriptionSave">Description</label>-->
-<!--    <textarea class="form-control" id="descriptionSave" rows="3" [(ngModel)]="item.description" name="description"></textarea>-->
-<!--  </div>-->
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['description'].errors && (formCreateItem.controls['description'].dirty || formCreateItem.controls['description'].touched)">
+          <div *ngIf="formCreateItem.controls['description'].errors">Describe your product!</div>
+        </div>
 
-<!--  &lt;!&ndash; category input &ndash;&gt;-->
-<!--  <div class="form-outline mb-4">-->
-<!--    <label class="form-label" for="categorySave">Category</label>-->
-<!--    <select class="form-control" id="categorySave">-->
-<!--      <option value="" disabled selected="selected">Current category: {{ item.category }}</option>-->
-<!--      <option *ngFor="let cat of categories" value="{{ cat }}">{{ cat }}</option>-->
-<!--    </select>-->
-<!--  </div>-->
+      </div>
+      <!-- quantityOnWarehouse input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="createQuantityOnWarehouse">Quantity on warehouse</label>
+        <input type="number" id="createQuantityOnWarehouse" class="form-control" formControlName="quantityOnWarehouse" name="quantityOnWarehouse" min="1"/>
 
-<!--  &lt;!&ndash; onSale input &ndash;&gt;-->
-<!--  <div class="form-check">-->
-<!--    <label class="form-check-label" for="onSaleSave"> onSale? </label>-->
-<!--    <input class="form-check-input" type="checkbox" id="onSaleSave" [(ngModel)]="onSale" name="onSale" />-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  &lt;!&ndash; Save button &ndash;&gt;-->
-<!--  <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>-->
-<!--  <br>-->
-<!--  &lt;!&ndash; Back without save&ndash;&gt;-->
-<!--  <a class="link-danger" href="/item/{{ item.id }}" *ngIf="saved; else backWithoutSave">Back</a>-->
-<!--  <ng-template #backWithoutSave>-->
-<!--    <a class="link-danger" href="/item/{{ item.id }}">Back without save</a>-->
-<!--  </ng-template>-->
-<!--  -->
-<!--</ng-template>-->
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['quantityOnWarehouse'].errors && (formCreateItem.controls['quantityOnWarehouse'].dirty
+             || formCreateItem.controls['quantityOnWarehouse'].touched)">
+          <div *ngIf="formCreateItem.controls['quantityOnWarehouse'].errors">How much on warehouse?</div>
+        </div>
+
+      </div>
+      <!-- quantity input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="createQuantity">Quantity</label>
+        <input type="number" id="createQuantity" class="form-control" formControlName="quantity" name="quantity" min="1"/>
+
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['quantity'].errors && (formCreateItem.controls['quantity'].dirty
+             || formCreateItem.controls['quantity'].touched)">
+          <div *ngIf="formCreateItem.controls['quantity'].errors">How much available for clients?</div>
+        </div>
+
+      </div>
+      <!-- price input -->
+      <div class="form-outline mb-4">
+        <label class="form-label" for="createPrice">Price</label>
+        <input type="number" id="createPrice" class="form-control" formControlName="price" name="price" required/>
+
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['price'].errors && (formCreateItem.controls['price'].dirty || formCreateItem.controls['price'].touched)">
+          <div *ngIf="formCreateItem.controls['price'].errors">Price must be provided!</div>
+        </div>
+
+
+      </div>
+      <!-- category input -->
+      <div class="form-floating mb-4">
+        <select class="form-select" id="createCategory" formControlName="category">
+          <option value="ACCESSORIES">ACCESSORIES</option>
+          <option value="SHOES">SHOES</option>
+          <option value="CLOTHING">CLOTHING</option>
+        </select>
+        <label for="createCategory">Choose one of this types</label>
+
+        <div class="form-control-feedback"
+             *ngIf="formCreateItem.controls['category'].errors && (formCreateItem.controls['category'].dirty || formCreateItem.controls['category'].touched)">
+          <div *ngIf="formCreateItem.controls['category'].errors">Choose category!</div>
+        </div>
+
+      </div>
+
+      <div class="row g-3">
+        <!-- Create button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4" [disabled]="!formCreateItem.valid">Create item</button>
+      </div>
+
+    </form>
+  </div>
+</ng-template>

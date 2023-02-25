@@ -11,6 +11,13 @@ import {UpdateItemComponent} from './update-item/update-item.component';
 import {LoginComponent} from './login/login.component';
 import {UserListComponent} from './user-list/user-list.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -18,7 +25,14 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatNativeDateModule
   ],
   declarations: [
     AppComponent,
@@ -30,6 +44,7 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
     UserListComponent,
     PageNotFoundComponent
   ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

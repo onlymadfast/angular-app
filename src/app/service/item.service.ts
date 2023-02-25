@@ -1,34 +1,57 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http'
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {Item} from '../entity/item';
 import {environment} from 'src/environments/environment';
 import {PageableOfItem} from "../entity/pageableOfItem";
 import {LocalStorageService} from "./localStorageService";
+import {ItemForCreate} from "../update-item/update-item.component";
 
 @Injectable({providedIn: 'root'})
 export class ItemService {
+
   private apiServerUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient,
-              private localStorage: LocalStorageService) {
+              private localStorageService: LocalStorageService) {
   }
 
-  //получение списка товаров
+  /**
+   * Get items with pagination
+   */
   public getItems(): Observable<PageableOfItem> {
-    return this.http.get<PageableOfItem>(`${this.apiServerUrl}/items/list`);
+
+    const token = this.localStorageService.getData("token");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+    };
+    return this.http.get<PageableOfItem>(`${this.apiServerUrl}/items/view/list`, httpOptions);
   }
 
-  //получение одного товара по имени
+  /**
+   * Get item by id
+   * @param id - item identifier
+   */
   public getItem(id: String): Observable<Item> {
-    return this.http.get<Item>(`${this.apiServerUrl}/items/${id}`)
+
+    const token = this.localStorageService.getData("token");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+    };
+    return this.http.get<Item>(`${this.apiServerUrl}/items/view/${id}`, httpOptions)
   }
 
   //получение товаров по категории
   public getItemByCategory(id: String, page?: number, size?: number): Observable<Item[]> {
     page = page == null ? 0 : page > 0 ? page - 1 : page;
     size = size == null ? 10 : size;
-    return this.http.get<Item[]>(`${this.apiServerUrl}/items/item/category/${id}?page=${page}&size=${size}`)
+    return this.http.get<Item[]>(`${this.apiServerUrl}/items/view/item/category/${id}?page=${page}&size=${size}`)
   }
 
   //получение топ товаров
@@ -36,35 +59,63 @@ export class ItemService {
     return this.http.get<Item[]>(`${this.apiServerUrl}/top10`)
   }
 
-  //добавление товара
-  public createItem(item: Item): Observable<Item> {
+  /**
+   * Create item
+   * @param item - item object to create
+   */
+  public createItem(item: ItemForCreate): Observable<string> {
 
-    let user = this.localStorage.getUserIfExist();
-    console.log('user -> ' + user);
-
+    const token = this.localStorageService.getData("token");
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'Bearer ' + user
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
       })
     };
-    return this.http.post<Item>(`${this.apiServerUrl}/items/edit`, item);
+    return this.http.post<Item>(`${this.apiServerUrl}/items/edit`, item, httpOptions)
+      .pipe(
+        map(data => {
+          return data.id;
+        })
+      )
   }
 
-  //обновление товара
+  /**
+   * Updating item
+   * @param id - item identifier
+   * @param item - item object
+   */
   public updateItem(id: string, item?: Item): Observable<Item> {
-    return this.http.put<Item>(`${this.apiServerUrl}/items/edit/${id}`, item);
+
+    const token = this.localStorageService.getData("token");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+    };
+    return this.http.put<Item>(`${this.apiServerUrl}/items/edit/${id}`, item, httpOptions)
+      .pipe(
+        map(data => {
+          return data;
+        })
+      )
   }
 
-  //удаление товара
+  /**
+   * Delete item by id
+   * @param id - item identifier
+   */
   public deleteItem(id: string): Observable<String> {
-    return this.http.delete<String>(`${this.apiServerUrl}/items/edit/${id}`);
+
+    const token = this.localStorageService.getData("token");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+    };
+    return this.http.delete<String>(`${this.apiServerUrl}/items/edit/${id}`, httpOptions);
   }
-
-  //TODO остановился на 1:28:17 https://www.youtube.com/watch?v=Gx4iBLKLVHk
-  //так же смотерел 2:09:16 https://www.youtube.com/watch?v=8ZPsZBcue50&t=1518s
-  //надо запустить и посмотреть как отрабатывает сервер сначала по товарам, разобраться с картинками, чтобы вытягивались.
-  //дальше добиться простого вывода на фронте, тоже по товарам.
-
 
 }

@@ -11,37 +11,67 @@
 <!--navbar start-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Store</a>
+    <a class="navbar-brand" href="/" *ngIf="isThatUserAdmin; else simpleUser" style="background-color: cornflowerblue">ADMIN MODE</a>
+    <ng-template #simpleUser>
+      <a class="navbar-brand" href="/" >Super Puper Store</a>
+    </ng-template>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        <li class="nav-item active">
+          <a class="nav-link " aria-current="page" href="/">Home</a>
         </li>
-        <li class="nav-item" *ngIf="isAuthenticated == true">
-          <a class="nav-link active" aria-current="page" href="user-profile">User profile</a>
+
+        <li class="nav-item active" *ngIf="isAuthenticated == false">
+          <a class="nav-link " aria-current="page" href="login">Sign in | Sign up</a>
         </li>
-        <li class="nav-item" *ngIf="isAuthenticated == false">
-          <a class="nav-link active" aria-current="page" href="login">Sign in | Sign up</a>
+
+        <li class="nav-item active" *ngIf="isThatUserAdmin == true">
+          <a class="nav-link " aria-current="page" href="/items/edit/">Create new item</a>
         </li>
-        <li *ngIf="isAuthenticated == true">
-          <span> Username: {{ username }} </span>
-          <a class="nav-link active" aria-current="page" (click)="logOut()">Log out</a>
+
+        <li class="nav-item dropdown active" *ngIf="isAuthenticated == true">
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Welcome, {{ username }}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="user-profile">Personal office</a></li>
+            <li><button class="dropdown-item" aria-current="page" (click)="logOut()">Logout</button></li>
+          </ul>
         </li>
+      </ul>
+      <ul>
       </ul>
     </div>
   </div>
 </nav>
 <!--navbar end-->
 
-<div class="container" id="main-container">
+<main class="mt-4 mb-5">
+  <div class="container">
 
   <router-outlet></router-outlet> <!--dynamic view based on app-routing.modules.ts -->
 
-</div>
+  </div>
+</main>
+
+
+<!--<footer class="bg-light text-lg-start">-->
+<!--  <hr class="m-0" />-->
+<!--&lt;!&ndash;  <div class="text-center py-4 align-items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;    <span class="me-3" *ngIf="isAuthenticated == false">Register, if you want to buy something</span>&ndash;&gt;-->
+<!--&lt;!&ndash;    <a type="button" class="btn btn-dark btn-rounded" *ngIf="isAuthenticated == false" href="login">Sign up / Sign in</a>&ndash;&gt;-->
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
+
+<!--  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.025);">-->
+<!--    <span class="me-3">© 2023 Copyright:</span>-->
+<!--    <a class="text-reset fw-bold" href="#">Super Puper Store</a>-->
+<!--  </div>-->
+<!--&lt;!&ndash;  <hr class="m-0" />&ndash;&gt;-->
+<!--</footer>-->
 
 </body>
 </html>

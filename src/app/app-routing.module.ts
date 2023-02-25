@@ -13,14 +13,16 @@ const routes: Routes = [
   {path: '', redirectTo: 'products', pathMatch: 'full'},
   {path: 'user-profile', component: UserProfileComponent},
   {path: 'item/:id', component: SingleItemComponent},
-  {path: 'item-update/:id', component: UpdateItemComponent},
-  {path: 'users-list', component:UserListComponent},
-  {path: 'login', component:LoginComponent},
-  { path: '**', component: PageNotFoundComponent }
+  {path: 'items/edit', component: UpdateItemComponent},
+  {path: 'items/edit/:id', component: UpdateItemComponent},
+  {path: 'users-list', component: UserListComponent},
+  {path: 'login', component: LoginComponent},
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
